@@ -13,13 +13,28 @@ export const trackComponent = async (req, res) => {
 export const getStats = async (req, res) => {
   try {
     const stats = await ComponentTrack.aggregate([
-      { $group: { _id: "$name", count: { $sum: 1 } } }
+      {
+        $group: {
+          _id: { name: "$name", variant: "$variant" },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$_id.name",
+          variant: "$_id.variant",
+          count: 1
+        }
+      }
     ]);
+
     res.json(stats);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const exportCSV = async (req, res) => {
   try {
