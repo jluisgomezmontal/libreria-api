@@ -3,9 +3,9 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
   try {
-    const user = await User.create({ email, password });
+    const user = await User.create({ email, email, password });
     res.status(201).json({ id: user._id, email: user.email });
   } catch (err) {
     res.status(400).json({ message: err.message });
